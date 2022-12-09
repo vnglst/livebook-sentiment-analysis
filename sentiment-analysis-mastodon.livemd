@@ -1,6 +1,6 @@
 <!-- livebook:{"persist_outputs":true} -->
 
-# Sentiment Analysis toots Jose Valim
+# Sentiment Analysis of Toots
 
 ```elixir
 Mix.install(
@@ -9,12 +9,177 @@ Mix.install(
     {:jason, ">= 0.0.0"},
     {:kino_bumblebee, "~> 0.1.0"},
     {:exla, "~> 0.4.1"},
-    {:kino_vega_lite, "~> 0.1.7"}
+    {:kino_vega_lite, "~> 0.1.7"},
+    {:kino, "~> 0.8.0"},
+    {:floki, "~> 0.34.0"}
   ],
   config: [nx: [default_backend: EXLA.Backend]]
 )
 
 alias VegaLite, as: Vl
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+Resolving Hex dependencies...
+Dependency resolution completed:
+New:
+  axon 0.3.1
+  bumblebee 0.1.0
+  castore 0.1.20
+  certifi 2.9.0
+  complex 0.4.2
+  decimal 2.0.0
+  elixir_make 0.7.1
+  exla 0.4.1
+  floki 0.34.0
+  hackney 1.18.1
+  httpoison 1.8.2
+  idna 6.1.1
+  jason 1.4.0
+  kino 0.8.0
+  kino_bumblebee 0.1.0
+  kino_vega_lite 0.1.7
+  metrics 1.0.1
+  mimerl 1.2.0
+  nx 0.4.1
+  nx_image 0.1.0
+  parse_trans 3.3.1
+  progress_bar 2.0.1
+  rustler_precompiled 0.5.4
+  ssl_verify_fun 1.1.6
+  table 0.1.2
+  telemetry 1.1.0
+  tokenizers 0.2.0
+  unicode_util_compat 0.7.0
+  unpickler 0.1.0
+  vega_lite 0.1.6
+  xla 0.4.1
+* Getting httpoison (Hex package)
+* Getting jason (Hex package)
+* Getting kino_bumblebee (Hex package)
+* Getting exla (Hex package)
+* Getting kino_vega_lite (Hex package)
+* Getting kino (Hex package)
+* Getting floki (Hex package)
+* Getting table (Hex package)
+* Getting vega_lite (Hex package)
+* Getting elixir_make (Hex package)
+* Getting nx (Hex package)
+* Getting telemetry (Hex package)
+* Getting xla (Hex package)
+* Getting complex (Hex package)
+* Getting bumblebee (Hex package)
+* Getting axon (Hex package)
+* Getting castore (Hex package)
+* Getting nx_image (Hex package)
+* Getting progress_bar (Hex package)
+* Getting tokenizers (Hex package)
+* Getting unpickler (Hex package)
+* Getting rustler_precompiled (Hex package)
+* Getting decimal (Hex package)
+* Getting hackney (Hex package)
+* Getting certifi (Hex package)
+* Getting idna (Hex package)
+* Getting metrics (Hex package)
+* Getting mimerl (Hex package)
+* Getting parse_trans (Hex package)
+* Getting ssl_verify_fun (Hex package)
+* Getting unicode_util_compat (Hex package)
+You have added/upgraded packages you could sponsor, run `mix hex.sponsor` to learn more
+==> floki
+Compiling 1 file (.xrl)
+Compiling 2 files (.erl)
+Compiling 28 files (.ex)
+Generated floki app
+==> decimal
+Compiling 4 files (.ex)
+Generated decimal app
+==> progress_bar
+Compiling 10 files (.ex)
+Generated progress_bar app
+==> table
+Compiling 5 files (.ex)
+Generated table app
+==> vega_lite
+Compiling 5 files (.ex)
+Generated vega_lite app
+===> Analyzing applications...
+===> Compiling unicode_util_compat
+===> Analyzing applications...
+===> Compiling idna
+===> Analyzing applications...
+===> Compiling telemetry
+==> jason
+Compiling 10 files (.ex)
+Generated jason app
+===> Analyzing applications...
+===> Compiling mimerl
+==> unpickler
+Compiling 3 files (.ex)
+Generated unpickler app
+==> ssl_verify_fun
+Compiling 7 files (.erl)
+Generated ssl_verify_fun app
+==> complex
+Compiling 2 files (.ex)
+Generated complex app
+==> nx
+Compiling 29 files (.ex)
+Generated nx app
+==> kino
+Compiling 37 files (.ex)
+Generated kino app
+==> kino_vega_lite
+Compiling 4 files (.ex)
+Generated kino_vega_lite app
+==> axon
+Compiling 24 files (.ex)
+Generated axon app
+==> nx_image
+Compiling 1 file (.ex)
+Generated nx_image app
+===> Analyzing applications...
+===> Compiling certifi
+===> Analyzing applications...
+===> Compiling parse_trans
+===> Analyzing applications...
+===> Compiling metrics
+===> Analyzing applications...
+===> Compiling hackney
+==> castore
+Compiling 1 file (.ex)
+Generated castore app
+==> elixir_make
+Compiling 6 files (.ex)
+Generated elixir_make app
+==> xla
+Compiling 2 files (.ex)
+Generated xla app
+==> exla
+Unpacking /Users/vnglst/Library/Caches/xla/0.4.1/cache/download/xla_extension-aarch64-darwin-cpu.tar.gz into /Users/vnglst/Library/Caches/mix/installs/elixir-1.14.2-erts-13.0.3/161d376be091031432b4cfffaf4f04b3/deps/exla/cache
+c++ -fPIC -I/Applications/Livebook.app/Contents/Resources/rel/vendor/otp/erts-13.0.3/include -Icache/xla_extension/include -O3 -Wall -Wno-sign-compare -Wno-unused-parameter -Wno-missing-field-initializers -Wno-comment -shared -std=c++17 -w -DLLVM_ON_UNIX=1 c_src/exla/exla.cc c_src/exla/exla_nif_util.cc c_src/exla/exla_client.cc -o cache/libexla.so -Lcache/xla_extension/lib -lxla_extension -flat_namespace -undefined suppress
+install_name_tool -change bazel-out/darwin_arm64-opt/bin/tensorflow/compiler/xla/extension/libxla_extension.so @loader_path/xla_extension/lib/libxla_extension.so -change bazel-out/darwin-opt/bin/tensorflow/compiler/xla/extension/libxla_extension.so @loader_path/xla_extension/lib/libxla_extension.so cache/libexla.so
+Compiling 21 files (.ex)
+Generated exla app
+==> rustler_precompiled
+Compiling 4 files (.ex)
+Generated rustler_precompiled app
+==> tokenizers
+Compiling 7 files (.ex)
+
+21:46:13.301 [debug] Copying NIF from cache and extracting to /Users/vnglst/Library/Caches/mix/installs/elixir-1.14.2-erts-13.0.3/161d376be091031432b4cfffaf4f04b3/_build/dev/lib/tokenizers/priv/native/libex_tokenizers-v0.2.0-nif-2.16-aarch64-apple-darwin.so
+Generated tokenizers app
+==> bumblebee
+Compiling 64 files (.ex)
+Generated bumblebee app
+==> kino_bumblebee
+Compiling 3 files (.ex)
+Generated kino_bumblebee app
+==> httpoison
+Compiling 3 files (.ex)
+Generated httpoison app
 ```
 
 <!-- livebook:{"output":true} -->
@@ -26,7 +191,16 @@ VegaLite
 ## Fetching statuses
 
 ```elixir
-%{body: body} = HTTPoison.get!("https://maakr.social/api/v1/accounts/109434491871265383/statuses")
+user_id_input = Kino.Input.text("Mastodon user id?")
+
+# Jose Valim is 109434491871265383
+# Koen van Gilst (that's me): 109326385811340972
+```
+
+```elixir
+user_id = Kino.Input.read(user_id_input)
+
+%{body: body} = HTTPoison.get!("https://maakr.social/api/v1/accounts/#{user_id}/statuses")
 ```
 
 <!-- livebook:{"output":true} -->
@@ -34,9 +208,9 @@ VegaLite
 ```
 %HTTPoison.Response{
   status_code: 200,
-  body: "[{\"id\":\"109484294107511553\",\"created_at\":\"2022-12-09T14:55:46.295Z\",\"in_reply_to_id\":null,\"in_reply_to_account_id\":null,\"sensitive\":false,\"spoiler_text\":\"\",\"visibility\":\"public\",\"language\":null,\"uri\":\"https://genserver.social/objects/2df9e33e-31ab-4f92-8a26-834cd1f5ff7d\",\"url\":\"https://genserver.social/objects/2df9e33e-31ab-4f92-8a26-834cd1f5ff7d\",\"replies_count\":0,\"reblogs_count\":0,\"favourites_count\":0,\"edited_at\":null,\"content\":\"Two years ago I would never have dreamed that I would be writing a guest article on Hugging Face's blog talking about the development of Machine Learning in Elixir: \\u003ca href=\\\"https://huggingface.co/blog/elixir-bumblebee\\\" rel=\\\"nofollow noopener noreferrer\\\" target=\\\"_blank\\\"\\u003ehttps://huggingface.co/blog/elixir-bumblebee\\u003c/a\\u003e\\u003cbr\\u003e\\u003cbr\\u003eWe've made great progress and more to come! 🚀\",\"reblog\":null,\"account\":{\"id\":\"109434491871265383\",\"username\":\"josevalim\",\"acct\":\"josevalim@genserver.social\",\"display_name\":\"José Valim\",\"locked\":false,\"bot\":false,\"discoverable\":true,\"group\":false,\"created_at\":\"2022-11-30T00:00:00.000Z\",\"note\":\"Creator of @elixirlang. Livestreams at \\u003ca href=\\\"http://twitch.tv/josevalim\\\" rel=\\\"nofollow noopener noreferrer\\\" target=\\\"_blank\\\"\\u003ehttp://twitch.tv/josevalim\\u003c/a\\u003e.\",\"url\":\"https://genserver.social/users/josevalim\",\"avatar\":\"https://s3-eu-central-1.amazonaws.com/maakr-social/cache/accounts/avatars/109/434/491/871/265/383/original/c0bd7b4312afd53e.jpg\",\"avatar_static\":\"https://s3-eu-central-1.amazonaws.com/maakr-social/cache/accounts/avatars/109/434/491/871/265/383/original/c0bd7b4312afd53e.jpg\",\"header\":\"https://maakr.social/headers/original/missing.png\",\"header_static\":\"https://maakr.social/headers/original/missing.png\",\"followers_count\":563,\"following_count\":9,\"statuses_count\":24,\"last_status_at\":\"2022-12-09\",\"emojis\":[],\"fields\":[]},\"media_attachments\":[],\"mentions\":[],\"tags\":[],\"emojis\":[],\"card\":{\"url\":\"https://huggingface.co/blog/elixir-bumblebee\",\"title\":\"From GPT2 to Stable Diffusion: Hugging Face arrives to the Elixir community\",\"description\":\"We’re on a journey to advance and democratize artificial intelligence through open source and open science.\",\"type\":\"link\",\"author_name\":\"\",\"author_url\":\"\",\"provider_name\":\"\",\"provider_url\":\"\",\"html\":\"\",\"width\":400,\"height\":200,\"image\":\"https://s3-eu-central-1.amazonaws.com/maakr-social/cache/preview_cards/images/000/014/619/original/7bcc518c574e540d.png\",\"embed_url\":\"\",\"blurhash\":\"UROo0v-hJC?O~JXLa{jYJ[%DxBM.$wR*WXkC\"},\"poll\":null},{\"id\":\"109480171145649188\",\"created_at\":\"2022-12-08T21:27:14.577Z\",\"in_reply_to_id\":null,\"in_reply_to_account_id\":null,\"sensitive\":false,\"spoiler_text\":\"\",\"visibility\":\"public\",\"language\":null,\"uri\":\"https://genserver.social/objects/0304ef84-3005-4c9c-a59e-e4d840627247\",\"url\":\"https://genserver.social/objects/0304ef84-3005-4c9c-a59e-e4d840627247\",\"replies_count\":0,\"reblogs_count\":0,\"favourites_count\":0,\"edited_at\":null,\"content\":\"Heart is beating fast. This is such a weird rush. :D\",\"reblog\":null,\"account\":{\"id\":\"109434491871265383\",\"username\":\"josevalim\",\"acct\":\"josevalim@genserver.social\",\"display_name\":\"José Valim\",\"locked\":false,\"bot\":false,\"discoverable\":true,\"group\":false,\"created_at\":\"2022-11-30T00:00:00.000Z\",\"note\":\"Creator of @elixirlang. Livestreams at \\u003ca href=\\\"http://twitch.tv/josevalim\\\" rel=\\\"nofollow noopener noreferrer\\\" target=\\\"_blank\\\"\\u003ehttp://twitch.tv/josevalim\\u003c/a\\u003e.\",\"url\":\"https://genserver.social/users/josevalim\",\"avatar\":\"https://s3-eu-central-1.amazonaws.com/maakr-social/cache/accounts/avatars/109/434/491/871/265/383/original/c0bd7b4312afd53e.jpg\",\"avatar_static\":\"https://s3-eu-central-1.amazonaws.com/maakr-social/cache/accounts/avatars/109/434/491/871/265/383/original/c0bd7b4312afd53e.jpg\",\"header\":\"https://maakr.social/headers/original/missing.png\",\"header_static\":\"https://maakr.social/headers/original/missing.png\",\"followers_count\":563,\"following_count\":9,\"statuses_count\":24,\"last_status_at\":\"2022-12-09\",\"emojis\":[],\"fields\":[]},\"media_attachments\":[],\"mentions\":[],\"tags\":[],\"emojis\":[],\"card\":nul" <> ...,
+  body: "[{\"id\":\"109484294107511553\",\"created_at\":\"2022-12-09T14:55:46.295Z\",\"in_reply_to_id\":null,\"in_reply_to_account_id\":null,\"sensitive\":false,\"spoiler_text\":\"\",\"visibility\":\"public\",\"language\":null,\"uri\":\"https://genserver.social/objects/2df9e33e-31ab-4f92-8a26-834cd1f5ff7d\",\"url\":\"https://genserver.social/objects/2df9e33e-31ab-4f92-8a26-834cd1f5ff7d\",\"replies_count\":0,\"reblogs_count\":0,\"favourites_count\":0,\"edited_at\":null,\"content\":\"Two years ago I would never have dreamed that I would be writing a guest article on Hugging Face's blog talking about the development of Machine Learning in Elixir: \\u003ca href=\\\"https://huggingface.co/blog/elixir-bumblebee\\\" rel=\\\"nofollow noopener noreferrer\\\" target=\\\"_blank\\\"\\u003ehttps://huggingface.co/blog/elixir-bumblebee\\u003c/a\\u003e\\u003cbr\\u003e\\u003cbr\\u003eWe've made great progress and more to come! 🚀\",\"reblog\":null,\"account\":{\"id\":\"109434491871265383\",\"username\":\"josevalim\",\"acct\":\"josevalim@genserver.social\",\"display_name\":\"José Valim\",\"locked\":false,\"bot\":false,\"discoverable\":true,\"group\":false,\"created_at\":\"2022-11-30T00:00:00.000Z\",\"note\":\"Creator of @elixirlang. Livestreams at \\u003ca href=\\\"http://twitch.tv/josevalim\\\" rel=\\\"nofollow noopener noreferrer\\\" target=\\\"_blank\\\"\\u003ehttp://twitch.tv/josevalim\\u003c/a\\u003e.\",\"url\":\"https://genserver.social/users/josevalim\",\"avatar\":\"https://s3-eu-central-1.amazonaws.com/maakr-social/cache/accounts/avatars/109/434/491/871/265/383/original/c0bd7b4312afd53e.jpg\",\"avatar_static\":\"https://s3-eu-central-1.amazonaws.com/maakr-social/cache/accounts/avatars/109/434/491/871/265/383/original/c0bd7b4312afd53e.jpg\",\"header\":\"https://maakr.social/headers/original/missing.png\",\"header_static\":\"https://maakr.social/headers/original/missing.png\",\"followers_count\":1427,\"following_count\":9,\"statuses_count\":24,\"last_status_at\":\"2022-12-09\",\"emojis\":[],\"fields\":[]},\"media_attachments\":[],\"mentions\":[],\"tags\":[],\"emojis\":[],\"card\":{\"url\":\"https://huggingface.co/blog/elixir-bumblebee\",\"title\":\"From GPT2 to Stable Diffusion: Hugging Face arrives to the Elixir community\",\"description\":\"We’re on a journey to advance and democratize artificial intelligence through open source and open science.\",\"type\":\"link\",\"author_name\":\"\",\"author_url\":\"\",\"provider_name\":\"\",\"provider_url\":\"\",\"html\":\"\",\"width\":400,\"height\":200,\"image\":\"https://s3-eu-central-1.amazonaws.com/maakr-social/cache/preview_cards/images/000/014/619/original/7bcc518c574e540d.png\",\"embed_url\":\"\",\"blurhash\":\"UROo0v-hJC?O~JXLa{jYJ[%DxBM.$wR*WXkC\"},\"poll\":null},{\"id\":\"109480171145649188\",\"created_at\":\"2022-12-08T21:27:14.577Z\",\"in_reply_to_id\":null,\"in_reply_to_account_id\":null,\"sensitive\":false,\"spoiler_text\":\"\",\"visibility\":\"public\",\"language\":null,\"uri\":\"https://genserver.social/objects/0304ef84-3005-4c9c-a59e-e4d840627247\",\"url\":\"https://genserver.social/objects/0304ef84-3005-4c9c-a59e-e4d840627247\",\"replies_count\":0,\"reblogs_count\":0,\"favourites_count\":0,\"edited_at\":null,\"content\":\"Heart is beating fast. This is such a weird rush. :D\",\"reblog\":null,\"account\":{\"id\":\"109434491871265383\",\"username\":\"josevalim\",\"acct\":\"josevalim@genserver.social\",\"display_name\":\"José Valim\",\"locked\":false,\"bot\":false,\"discoverable\":true,\"group\":false,\"created_at\":\"2022-11-30T00:00:00.000Z\",\"note\":\"Creator of @elixirlang. Livestreams at \\u003ca href=\\\"http://twitch.tv/josevalim\\\" rel=\\\"nofollow noopener noreferrer\\\" target=\\\"_blank\\\"\\u003ehttp://twitch.tv/josevalim\\u003c/a\\u003e.\",\"url\":\"https://genserver.social/users/josevalim\",\"avatar\":\"https://s3-eu-central-1.amazonaws.com/maakr-social/cache/accounts/avatars/109/434/491/871/265/383/original/c0bd7b4312afd53e.jpg\",\"avatar_static\":\"https://s3-eu-central-1.amazonaws.com/maakr-social/cache/accounts/avatars/109/434/491/871/265/383/original/c0bd7b4312afd53e.jpg\",\"header\":\"https://maakr.social/headers/original/missing.png\",\"header_static\":\"https://maakr.social/headers/original/missing.png\",\"followers_count\":1427,\"following_count\":9,\"statuses_count\":24,\"last_status_at\":\"2022-12-09\",\"emojis\":[],\"fields\":[]},\"media_attachments\":[],\"mentions\":[],\"tags\":[],\"emojis\":[],\"card\":n" <> ...,
   headers: [
-    {"Date", "Fri, 09 Dec 2022 19:39:43 GMT"},
+    {"Date", "Fri, 09 Dec 2022 20:59:37 GMT"},
     {"Content-Type", "application/json; charset=utf-8"},
     {"Transfer-Encoding", "chunked"},
     {"Connection", "keep-alive"},
@@ -47,16 +221,16 @@ VegaLite
     {"X-XSS-Protection", "0"},
     {"Permissions-Policy", "interest-cohort=()"},
     {"X-RateLimit-Limit", "300"},
-    {"X-RateLimit-Remaining", "298"},
-    {"X-RateLimit-Reset", "2022-12-09T19:40:00.000963Z"},
+    {"X-RateLimit-Remaining", "295"},
+    {"X-RateLimit-Reset", "2022-12-09T21:00:00.567723Z"},
     {"Cache-Control", "no-store"},
     {"Link",
      "<https://maakr.social/api/v1/accounts/109434491871265383/statuses?max_id=109444193916466067>; rel=\"next\", <https://maakr.social/api/v1/accounts/109434491871265383/statuses?min_id=109484294107511553>; rel=\"prev\""},
-    {"ETag", "W/\"5c47b605298f854b05a37e7b43dd8345\""},
+    {"ETag", "W/\"3a4c738e0a28ce9439a1cb940732de1f\""},
     {"Content-Security-Policy",
-     "base-uri 'none'; default-src 'none'; frame-ancestors 'none'; font-src 'self' https://maakr.social; img-src 'self' https: data: blob: https://maakr.social; style-src 'self' https://maakr.social 'nonce-fHDIlHFcT0U9LMkY+ZeUCQ=='; media-src 'self' https: data: https://maakr.social; frame-src 'self' https:; manifest-src 'self' https://maakr.social; connect-src 'self' data: blob: https://maakr.social https://s3-eu-central-1.amazonaws.com wss://maakr.social; script-src 'self' https://maakr.social 'wasm-unsafe-eval'; child-src 'self' blob: https://maakr.social; worker-src 'self' blob: https://maakr.social"},
-    {"X-Request-Id", "133c83f2-692a-4692-ad8d-573c5de3123b"},
-    {"X-Runtime", "0.113973"},
+     "base-uri 'none'; default-src 'none'; frame-ancestors 'none'; font-src 'self' https://maakr.social; img-src 'self' https: data: blob: https://maakr.social; style-src 'self' https://maakr.social 'nonce-n0BXCLmWdAXzFAxs1HkLTQ=='; media-src 'self' https: data: https://maakr.social; frame-src 'self' https:; manifest-src 'self' https://maakr.social; connect-src 'self' data: blob: https://maakr.social https://s3-eu-central-1.amazonaws.com wss://maakr.social; script-src 'self' https://maakr.social 'wasm-unsafe-eval'; child-src 'self' blob: https://maakr.social; worker-src 'self' blob: https://maakr.social"},
+    {"X-Request-Id", "0865bb30-bf2b-46e6-9b5c-a4e171c8a54e"},
+    {"X-Runtime", "0.127012"},
     {"Strict-Transport-Security", "max-age=63072000; includeSubDomains"},
     {"Vary", "Origin"},
     {"X-Cached", "MISS"},
@@ -82,28 +256,31 @@ contents =
   |> Jason.decode!()
   |> Enum.map(fn %{"content" => content} -> content end)
   |> Enum.reject(fn str -> str == "" end)
-  |> Enum.map(&String.replace(&1, ~r/<[a-zA-Z\/][^>]*>/, " "))
+  |> Enum.map(fn body ->
+    Floki.parse_document!(body) |> Floki.text()
+  end)
+  |> Enum.map(&String.replace(&1, "\n", " "))
 ```
 
 <!-- livebook:{"output":true} -->
 
 ```
-["Two years ago I would never have dreamed that I would be writing a guest article on Hugging Face's blog talking about the development of Machine Learning in Elixir:  https://huggingface.co/blog/elixir-bumblebee   We've made great progress and more to come! 🚀",
+["Two years ago I would never have dreamed that I would be writing a guest article on Hugging Face's blog talking about the development of Machine Learning in Elixir: https://huggingface.co/blog/elixir-bumblebee  We've made great progress and more to come! 🚀",
  "Heart is beating fast. This is such a weird rush. :D",
  "We are eyeing Whisper for sure. The ML model parts should be easy. But we probably need some toolkit for audio processing.",
  "The announcement is on the home page of the orange site, in case you want to help get the word out. :)",
  "This would not be possible without:  * Jonatan Kłosko, Sean Moriarity, and Paulo Valente (from @dashbit and @dockyard) * Hugging Face for truly making AI accessible across teams and ecosystems * The Erlang VM (@erlang_org)  Thank you! ❤️🧡💛💚💙💜",
  "You can do all of this within the same Elixir instance (or distributed!). This is HUGE. From Phoenix LiveView to Bumblebee, Elixir + Erlang allows you to drop several layers of complexity and focus on your code. No JSON APIs, no gRPCs, no additional services. Just function calls.  [3/4]",
  "The best part: you can explore Machine Learning models in Livebook and then easily embed them into your Phoenix applications, Broadway pipelines, Nerves devices, etc. This is the beginning of opening the Elixir ecosystem to a whole new category of applications.  [2/4]",
- "Announcing Bumblebee: from GPT2 to Stable Diffusion neural networks for Elixir. And - with Livebook v0.8 - all it takes for you to give it a try is three clicks.  Watch the video announcement:  https://www.youtube.com/watch?v=g3oyh3g1AtQ   Read the news:  https://news.livebook.dev/announcing-bumblebee-gpt2-stable-diffusion-and-more-in-elixir-3Op73O   [1/4]",
+ "Announcing Bumblebee: from GPT2 to Stable Diffusion neural networks for Elixir. And - with Livebook v0.8 - all it takes for you to give it a try is three clicks.  Watch the video announcement: https://www.youtube.com/watch?v=g3oyh3g1AtQ  Read the news: https://news.livebook.dev/announcing-bumblebee-gpt2-stable-diffusion-and-more-in-elixir-3Op73O  [1/4]",
  "Bee noises intensifies! zzzzzzzzzzzzzzz",
- "Congratulations to everyone who participated on  https://spawnfest.org/ !  A special thank you to those who used this opportunity to contribute to  https://livebook.dev/ , your work is definitely inspiring the community and the team to continue improving it. ❤️",
+ "Congratulations to everyone who participated on https://spawnfest.org/!  A special thank you to those who used this opportunity to contribute to https://livebook.dev/, your work is definitely inspiring the community and the team to continue improving it. ❤️",
  "More context for the uninitiated: When deploying machine learning models, especially in the GPU, you want to batch several inputs before doing the work. For example, if you are going to classify an image, you would rather classify 10 of them at once. Nx.Serving abstracts all of this for you.  PS: This is not the HUGE announcement. ETA for that is tomorrow (Thu UTC).  [2/2]",
- "Nx v0.4.1 is out with a new feature called Nx.Serving:  https://hexdocs.pm/nx/Nx.Serving.html   For those familiar with TensorFlow Serving, this achieves the same but within the same Erlang VM, so you don't need 3rd-party dependencies.  This makes it practical to deploy ML models as part of your Phoenix apps, Broadway pipelines, and Nerves systems!  [1/2]",
- "  @ brainlid      @ cocoa    a project that uses elixir_make may opt-in to have a precompiler and then ship prebuilt binaries (so users don't need make+gcc to build the dep in the first place). Here is an example:  https://github.com/elixir-nx/stb_image/pull/22 ",
- "  @ Tuxified    the ants represent misdirection 😅",
+ "Nx v0.4.1 is out with a new feature called Nx.Serving: https://hexdocs.pm/nx/Nx.Serving.html  For those familiar with TensorFlow Serving, this achieves the same but within the same Erlang VM, so you don't need 3rd-party dependencies.  This makes it practical to deploy ML models as part of your Phoenix apps, Broadway pipelines, and Nerves systems!  [1/2]",
+ "@brainlid@cocoa a project that uses elixir_make may opt-in to have a precompiler and then ship prebuilt binaries (so users don't need make+gcc to build the dep in the first place). Here is an example: https://github.com/elixir-nx/stb_image/pull/22",
+ "@Tuxified the ants represent misdirection 😅",
  "I am very excited because, if all goes according to plan, this week we are going to release something HUGE, never seen before on Elixir or the BEAM!",
- "We have released elixir_make v0.7.0:  hexdocs.pm/elixir_make/   Its main new feature is precompilation support, fully implemented by   @ cocoa   !"]
+ "We have released elixir_make v0.7.0: hexdocs.pm/elixir_make/  Its main new feature is precompilation support, fully implemented by @cocoa!"]
 ```
 
 ## Loading model
@@ -127,7 +304,7 @@ serving =
 
 ```
 
-20:39:44.832 [info] TfrtCpuClient created.
+21:46:17.309 [info] TfrtCpuClient created.
 
 ```
 
@@ -162,7 +339,7 @@ outputs =
   %{
     label: "POS",
     score: 0.9909659624099731,
-    str: "Two years ago I would never have dreamed that I would be writing a guest article on Hugging Face's blog talking about the development of Machine Learning in Elixir:  https://huggingface.co/blog/elixir-bumblebee   We've made great progress and more to come! 🚀"
+    str: "Two years ago I would never have dreamed that I would be writing a guest article on Hugging Face's blog talking about the development of Machine Learning in Elixir: https://huggingface.co/blog/elixir-bumblebee  We've made great progress and more to come! 🚀"
   },
   %{
     label: "POS",
@@ -197,13 +374,13 @@ outputs =
   %{
     label: "POS",
     score: 0.6140084266662598,
-    str: "Announcing Bumblebee: from GPT2 to Stable Diffusion neural networks for Elixir. And - with Livebook v0.8 - all it takes for you to give it a try is three clicks.  Watch the video announcement:  https://www.youtube.com/watch?v=g3oyh3g1AtQ   Read the news:  https://news.livebook.dev/announcing-bumblebee-gpt2-stable-diffusion-and-more-in-elixir-3Op73O   [1/4]"
+    str: "Announcing Bumblebee: from GPT2 to Stable Diffusion neural networks for Elixir. And - with Livebook v0.8 - all it takes for you to give it a try is three clicks.  Watch the video announcement: https://www.youtube.com/watch?v=g3oyh3g1AtQ  Read the news: https://news.livebook.dev/announcing-bumblebee-gpt2-stable-diffusion-and-more-in-elixir-3Op73O  [1/4]"
   },
   %{label: "NEG", score: 0.9642468094825745, str: "Bee noises intensifies! zzzzzzzzzzzzzzz"},
   %{
     label: "POS",
-    score: 0.9924547672271729,
-    str: "Congratulations to everyone who participated on  https://spawnfest.org/ !  A special thank you to those who used this opportunity to contribute to  https://livebook.dev/ , your work is definitely inspiring the community and the team to continue improving it. ❤️"
+    score: 0.9924732446670532,
+    str: "Congratulations to everyone who participated on https://spawnfest.org/!  A special thank you to those who used this opportunity to contribute to https://livebook.dev/, your work is definitely inspiring the community and the team to continue improving it. ❤️"
   },
   %{
     label: "NEU",
@@ -213,18 +390,14 @@ outputs =
   %{
     label: "NEU",
     score: 0.5226280093193054,
-    str: "Nx v0.4.1 is out with a new feature called Nx.Serving:  https://hexdocs.pm/nx/Nx.Serving.html   For those familiar with TensorFlow Serving, this achieves the same but within the same Erlang VM, so you don't need 3rd-party dependencies.  This makes it practical to deploy ML models as part of your Phoenix apps, Broadway pipelines, and Nerves systems!  [1/2]"
+    str: "Nx v0.4.1 is out with a new feature called Nx.Serving: https://hexdocs.pm/nx/Nx.Serving.html  For those familiar with TensorFlow Serving, this achieves the same but within the same Erlang VM, so you don't need 3rd-party dependencies.  This makes it practical to deploy ML models as part of your Phoenix apps, Broadway pipelines, and Nerves systems!  [1/2]"
   },
   %{
     label: "NEU",
-    score: 0.7518523931503296,
-    str: "  @ brainlid      @ cocoa    a project that uses elixir_make may opt-in to have a precompiler and then ship prebuilt binaries (so users don't need make+gcc to build the dep in the first place). Here is an example:  https://github.com/elixir-nx/stb_image/pull/22 "
+    score: 0.743052065372467,
+    str: "@brainlid@cocoa a project that uses elixir_make may opt-in to have a precompiler and then ship prebuilt binaries (so users don't need make+gcc to build the dep in the first place). Here is an example: https://github.com/elixir-nx/stb_image/pull/22"
   },
-  %{
-    label: "NEG",
-    score: 0.8873650431632996,
-    str: "  @ Tuxified    the ants represent misdirection 😅"
-  },
+  %{label: "NEG", score: 0.8763542175292969, str: "@Tuxified the ants represent misdirection 😅"},
   %{
     label: "POS",
     score: 0.9922645092010498,
@@ -232,8 +405,8 @@ outputs =
   },
   %{
     label: "POS",
-    score: 0.936056911945343,
-    str: "We have released elixir_make v0.7.0:  hexdocs.pm/elixir_make/   Its main new feature is precompilation support, fully implemented by   @ cocoa   !"
+    score: 0.9479072690010071,
+    str: "We have released elixir_make v0.7.0: hexdocs.pm/elixir_make/  Its main new feature is precompilation support, fully implemented by @cocoa!"
   }
 ]
 ```
@@ -242,12 +415,16 @@ outputs =
 Vl.new(width: 700, height: 400, title: "Sentiment analysis")
 |> Vl.data_from_values(outputs, only: ["label", "score"])
 |> Vl.mark(:arc)
-|> Vl.encode_field(:color, "label", type: :nominal, scale: [scheme: "category10"])
+|> Vl.encode_field(:color, "label",
+  title: "Sentiment",
+  type: :nominal,
+  scale: [scheme: "category10"]
+)
 |> Vl.encode_field(:theta, "score", type: :quantitative)
 ```
 
 <!-- livebook:{"output":true} -->
 
 ```vega-lite
-{"$schema":"https://vega.github.io/schema/vega-lite/v5.json","data":{"values":[{"label":"POS","score":0.9909659624099731},{"label":"POS","score":0.9739554524421692},{"label":"POS","score":0.6387661695480347},{"label":"NEU","score":0.578300416469574},{"label":"POS","score":0.985962450504303},{"label":"NEU","score":0.7250223159790039},{"label":"POS","score":0.9076465368270874},{"label":"POS","score":0.6140084266662598},{"label":"NEG","score":0.9642468094825745},{"label":"POS","score":0.9924547672271729},{"label":"NEU","score":0.9224608540534973},{"label":"NEU","score":0.5226280093193054},{"label":"NEU","score":0.7518523931503296},{"label":"NEG","score":0.8873650431632996},{"label":"POS","score":0.9922645092010498},{"label":"POS","score":0.936056911945343}]},"encoding":{"color":{"field":"label","scale":{"scheme":"category10"},"type":"nominal"},"theta":{"field":"score","type":"quantitative"}},"height":400,"mark":"arc","title":"Sentiment analysis","width":700}
+{"$schema":"https://vega.github.io/schema/vega-lite/v5.json","data":{"values":[{"label":"POS","score":0.9909659624099731},{"label":"POS","score":0.9739554524421692},{"label":"POS","score":0.6387661695480347},{"label":"NEU","score":0.578300416469574},{"label":"POS","score":0.985962450504303},{"label":"NEU","score":0.7250223159790039},{"label":"POS","score":0.9076465368270874},{"label":"POS","score":0.6140084266662598},{"label":"NEG","score":0.9642468094825745},{"label":"POS","score":0.9924732446670532},{"label":"NEU","score":0.9224608540534973},{"label":"NEU","score":0.5226280093193054},{"label":"NEU","score":0.743052065372467},{"label":"NEG","score":0.8763542175292969},{"label":"POS","score":0.9922645092010498},{"label":"POS","score":0.9479072690010071}]},"encoding":{"color":{"field":"label","scale":{"scheme":"category10"},"title":"Sentiment","type":"nominal"},"theta":{"field":"score","type":"quantitative"}},"height":400,"mark":"arc","title":"Sentiment analysis","width":700}
 ```
